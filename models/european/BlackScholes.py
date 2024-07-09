@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.stats import norm
 
+# https://www.investopedia.com/terms/b/blackscholes.asp
 class BlackScholes:
     def __init__(self, S, K, T, r, sigma):
         """
