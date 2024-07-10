@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from models.american.Binomial import Binomial
 from models.european.BlackScholes import BlackScholes
-from matplot.plotting import call_payoff, put_payoff, plot_payoff
+from matplot.plotting import long_call_payoff, long_put_payoff, short_call_payoff, short_put_payoff, plot_payoff
 
 # ---------------------------------
 # Tab config
@@ -141,4 +141,21 @@ with payoff_long_call_col:
 with payoff_long_put_col:
     st.header("Long Put P&L")
     fig_put = plot_payoff(stock_prices, payoff_long_put, 'Long', 'Put', 'r')
+    st.pyplot(fig_put)
+
+
+# Calculate the payoff for the short call & put options
+payoff_short_call = short_call_payoff(stock_prices, K, call_price)
+payoff_short_put = short_put_payoff(stock_prices, K, put_price)
+
+payoff_short_call_col, payoff_short_put_col = st.columns(2)
+
+with payoff_short_call_col:
+    st.header("Short Call P&L")
+    fig_call = plot_payoff(stock_prices, payoff_short_call, 'Short', 'Call', 'g')
+    st.pyplot(fig_call)
+
+with payoff_short_put_col:
+    st.header("Short Put P&L")
+    fig_put = plot_payoff(stock_prices, payoff_short_put, 'Short', 'Put', 'r')
     st.pyplot(fig_put)
