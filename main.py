@@ -128,17 +128,17 @@ st.divider()
 stock_prices = np.arange(0.75 * S, 1.45 * S, 1)
 
 # Calculate the payoff for the long call & put options
-payoff_long_call = call_payoff(stock_prices, K, call_price)
-payoff_long_put = put_payoff(stock_prices, K, put_price)
+payoff_long_call = long_call_payoff(stock_prices, K, call_price)
+payoff_long_put = long_put_payoff(stock_prices, K, put_price)
 
 payoff_long_call_col, payoff_long_put_col = st.columns(2)
 
 with payoff_long_call_col:
     st.header("Long Call P&L")
-    fig_call = plot_payoff(stock_prices, payoff_long_call, 'Call', 'g')
+    fig_call = plot_payoff(stock_prices, payoff_long_call, 'Long', 'Call', 'g')
     st.pyplot(fig_call)
 
 with payoff_long_put_col:
     st.header("Long Put P&L")
-    fig_put = plot_payoff(stock_prices, payoff_long_put, 'Put', 'r')
+    fig_put = plot_payoff(stock_prices, payoff_long_put, 'Long', 'Put', 'r')
     st.pyplot(fig_put)
