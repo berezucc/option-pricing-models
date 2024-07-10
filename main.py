@@ -6,6 +6,7 @@ import numpy as np
 from models.american.Binomial import Binomial
 from models.european.BlackScholes import BlackScholes
 from matplot.payoff_plotting import long_call_payoff, long_put_payoff, short_call_payoff, short_put_payoff, plot_payoff
+from matplot.heatmap_plotting import heatmap_plot
 
 # ---------------------------------
 # Tab config
@@ -145,16 +146,34 @@ with put_price_col:
 # ---------------------------------
 st.divider()
 
+# Create grids of spot prices and volatilities
+spot_prices = np.arange(0.75 * S, 1.25 * S, 5)  # Min spot price to max spot price
+volatilities = np.linspace(0.01, 0.99, 10)  # Min volatility to max volatility
+
+# Initialize matrices to hold call and put prices
+call_prices = np.zeros((len(volatilities), len(spot_prices)))
+put_prices = np.zeros((len(volatilities), len(spot_prices)))
+
+# Calculate call and put prices for each combination of spot price and volatility
+for i, sigma in enumerate(volatilities):
+    for j, S in enumerate(spot_prices):
+        bs = BlackScholes(S, K, T, r, sigma)
+        call_prices[i, j] = bs.call_price()
+        put_prices[i, j] = bs.put_price()
+
 call_col, put_col = st.columns(2)
 
 # Call heatmap
 with call_col:
     st.header("Call Price Heatmap")
+    call_heatmap = heatmap_plot(call_prices, spot_prices, volatilities, "Call")
+    st.pyplot(call_heatmap)
 
 # Put heatmap
 with put_col:
     st.header("Put Price Heatmap")
-
+    call_heatmap = heatmap_plot(put_prices, spot_prices, volatilities, "Put")
+    st.pyplot(call_heatmap)
 
 # ---------------------------------
 # Payoff Diagrams
@@ -180,7 +199,6 @@ with payoff_long_put_col:
     fig_put = plot_payoff(stock_prices, payoff_long_put, 'Long', 'Put', 'r')
     st.pyplot(fig_put)
 
-
 # Calculate the payoff for the short call & put options
 payoff_short_call = short_call_payoff(stock_prices, K, call_price)
 payoff_short_put = short_put_payoff(stock_prices, K, put_price)
@@ -189,10 +207,10 @@ payoff_short_call_col, payoff_short_put_col = st.columns(2)
 
 with payoff_short_call_col:
     st.header("Short Call P&L")
-    fig_call = plot_payoff(stock_prices, payoff_short_call, 'Short', 'Call', 'g')
+    fig_call = plot_payoff(stock_prices, payoff_short_call, 'Short', 'Call', 'orange')
     st.pyplot(fig_call)
 
 with payoff_short_put_col:
     st.header("Short Put P&L")
-    fig_put = plot_payoff(stock_prices, payoff_short_put, 'Short', 'Put', 'r')
+    fig_put = plot_payoff(stock_prices, payoff_short_put, 'Short', 'Put', 'blue')
     st.pyplot(fig_put)
