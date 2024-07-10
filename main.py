@@ -3,8 +3,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-from models.american.Binomial import Binomial
+from models.american.Binomial import BinomialAmericanOption
 from models.european.BlackScholes import BlackScholes
+from models.european.MonteCarlo import MonteCarlo
 from matplot.payoff_plotting import long_call_payoff, long_put_payoff, short_call_payoff, short_put_payoff, plot_payoff
 from matplot.heatmap_plotting import heatmap_plot
 
@@ -29,7 +30,7 @@ with st.sidebar:
     # Option pricing model inputs
     model = st.radio(
         "Choose an options pricing model",
-        ("American (Black-Scholes)", "European (Binomial)")
+        ("Black-Scholes (American)", "Binomial Option (European)", "Monte-Carlo Simulation (European)")
     )
 
     S = st.number_input("Current Asset Price", value=100.0, step=1.0)
@@ -38,8 +39,10 @@ with st.sidebar:
     r = st.number_input("Risk-free Interest Rate", value=0.05)
     sigma = st.number_input("Volatility", value=0.2)
 
-    if "European" in model:
+    if "Binomial Option" in model:
         N = st.number_input("Number of Time Steps", value=50.0, step=1.0)
+    elif "Monte-Carlo" in model:
+        N = st.number_input("Number of Time Steps", value=10000.0, step=1000.0)
 
     st.divider()
 
@@ -48,7 +51,7 @@ with st.sidebar:
 # Display option calculation inputs
 # ---------------------------------
 # regex to filter out model name and option type
-model_name = re.findall(r"\((.*?)\)", model)[0]
+model_name = model.split('(')[0].strip()
 option_type = "European" if "European" in model else "American"
 option_meaning = ("European options can only be exercised at expiration. The majority of CME Group options on futures are European style and can be exercised only at expiration."
                   if option_type == "European" else 
@@ -64,6 +67,8 @@ input_data = {
     "Volatility (σ)": [sigma],
     "Risk-Free Interest Rate": [r],
 }
+if "European" in model:
+    input_data["Number of Time Steps"] = [N]
 input_df = pd.DataFrame(input_data)
 st.table(input_df)
 
@@ -91,8 +96,11 @@ if "Black-Scholes" in model:
     bs = BlackScholes(S, K, T, r, sigma)
     call_price, put_price = bs.call_price(), bs.put_price()
 elif "Binomial" in model:
-    binomial_option = Binomial(S, K, T, r, sigma, N)
-    call_price, put_price = binomial_option.binomial_american_option(option_type='call'), binomial_option.binomial_american_option(option_type='put')
+    binomial = BinomialAmericanOption(S, K, T, r, sigma, N)
+    call_price, put_price = binomial.call_price(), binomial.put_price()
+elif "Monte-Carlo" in model:
+    montecarlo = MonteCarlo(S, K, T, r, sigma, N)
+    call_price, put_price = montecarlo.call_price(), montecarlo.put_price()
 
 # Display Call and Put Prices
 call_price_col, put_price_col = st.columns([1,1], gap="small")
