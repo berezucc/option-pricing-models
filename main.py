@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import mysql.connector
 
 from db.db import insert_input_into_db, query_table
 
