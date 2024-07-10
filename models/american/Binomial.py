@@ -36,7 +36,7 @@ class Binomial:
         T = self.time_to_maturity
         r = self.riskfree_interest_rate
         sigma = self.volatility
-        N = self.steps
+        N = int(self.steps)
 
         dt = T / N
         u = np.exp(sigma * np.sqrt(dt))

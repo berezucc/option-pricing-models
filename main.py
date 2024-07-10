@@ -43,8 +43,12 @@ with st.sidebar:
 # ---------------------------------
 # Option Pricing Section Calculation
 # ---------------------------------
-bs = BlackScholes(S, K, T, r, sigma)
-call_price, put_price = bs.call_price(), bs.put_price()
+if "Black-Scholes" in model:
+    bs = BlackScholes(S, K, T, r, sigma)
+    call_price, put_price = bs.call_price(), bs.put_price()
+elif "Binomial" in model:
+    binomial_option = Binomial(S, K, T, r, sigma, N)
+    call_price, put_price = binomial_option.binomial_american_option(option_type='call'), binomial_option.binomial_american_option(option_type='put')
 
 # Display Call and Put Prices
 call_price_col, put_price_col = st.columns([1,1], gap="small")
