@@ -42,8 +42,13 @@ with st.sidebar:
 # ---------------------------------
 # Display option calculation inputs
 # ---------------------------------
-# regex to filter out model name
+# regex to filter out model name and option type
 model_name = re.findall(r"\((.*?)\)", model)[0]
+option_type = "European" if "European" in model else "American"
+option_meaning = ("European options can only be exercised at expiration. The majority of CME Group options on futures are European style and can be exercised only at expiration."
+                  if option_type == "European" else 
+                  "American options can be exercised at any time before expiration. Some of the notable exceptions that have American style expiration are the quarterly options on the S&P500 futures contracts, SOFR options, and Treasury options.")
+
 st.title(f"{model_name} Pricing Model")
 
 # Table of Inputs
@@ -57,6 +62,20 @@ input_data = {
 input_df = pd.DataFrame(input_data)
 st.table(input_df)
 
+# Display the model name, type and meaning 
+st.markdown(f"""
+    <div style="
+        padding: 20px;
+        border-radius: 5px;
+        background-color: #223344;
+        color: #ffffff;
+        border: 1px solid #34495e;
+        margin-bottom: 20px;
+    ">
+        <h4 style="margin: 0;">{option_type} Option Model</h4>
+        <p style="margin: 0;">{option_type}: {option_meaning}</p>
+    </div>
+""", unsafe_allow_html=True)
 
 # ---------------------------------
 # Option Pricing Section Calculation
