@@ -20,11 +20,12 @@ class MonteCarlo:
         self.time_to_maturity = T
         self.riskfree_interest_rate = r
         self.volatility = sigma
-        self.steps = int(N)
+        self.simulations = int(N)
 
     def stock_price_at_maturity(self):
         # Simulate end-of-period stock prices
-        Z = np.random.standard_normal(self.steps)
+        Z = np.random.standard_normal(self.simulations)
+        # geometric Brownian motion model
         ST = self.curr_price * np.exp((self.riskfree_interest_rate - 0.5 * self.volatility**2) * self.time_to_maturity + self.volatility * np.sqrt(self.time_to_maturity) * Z)
         return ST
 
