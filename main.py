@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from models.american.Binomial import Binomial
 from models.european.BlackScholes import BlackScholes
-
+from matplot.plotting import call_payoff, put_payoff, plot_payoff
 
 # ---------------------------------
 # Tab config
@@ -43,6 +43,8 @@ with st.sidebar:
 # ---------------------------------
 # Option Pricing Section Calculation
 # ---------------------------------
+st.divider()
+
 if "Black-Scholes" in model:
     bs = BlackScholes(S, K, T, r, sigma)
     call_price, put_price = bs.call_price(), bs.put_price()
@@ -104,66 +106,39 @@ with put_price_col:
 # ---------------------------------
 # Heatmap Section
 # ---------------------------------
+st.divider()
+
 call_col, put_col = st.columns(2)
 
 # Call heatmap
 with call_col:
-    st.divider()
     st.header("Call Price Heatmap")
 
 # Put heatmap
 with put_col:
-    st.divider()
     st.header("Put Price Heatmap")
 
 
 # ---------------------------------
 # Payoff Diagrams
 # ---------------------------------
-# Stock price range at expiration of the put
+st.divider()
+
+# Stock price range
 stock_prices = np.arange(0.75 * S, 1.45 * S, 1)
 
-# Function to calculate call option payoff
-def call_payoff(sT, strike_price, premium):
-    # if stock price > strike price, the payoff is sT - strike price - premium
-    # else its -premium
-    return np.where(sT > strike_price, sT - strike_price, 0) - premium
-
+# Calculate the payoff for the long call & put options
 payoff_long_call = call_payoff(stock_prices, K, call_price)
-
-# Function to calculate put option payoff
-def put_payoff(sT, strike_price, premium):
-    # if stock price < strike price, the payoff is strike price- sT - premium
-    # else its -premium
-    return np.where(sT < strike_price, strike_price - sT, 0) - premium
 payoff_long_put = put_payoff(stock_prices, K, put_price)
 
-# Plot the payoff diagram
-fig, ax = plt.subplots()
+payoff_long_call_col, payoff_long_put_col = st.columns(2)
 
-ax.spines['bottom'].set_position('zero')
-ax.plot(stock_prices, payoff_long_call, label='Long Call', color='g')  # Plot the long call payoff
-max_y = max(abs(payoff_long_call.min()), abs(payoff_long_call.max()))
-ax.set_ylim(-max_y, max_y) # set y-axis limits as equal in both directions
+with payoff_long_call_col:
+    st.header("Long Call P&L")
+    fig_call = plot_payoff(stock_prices, payoff_long_call, 'Call', 'g')
+    st.pyplot(fig_call)
 
-plt.xlabel('Stock Price')
-plt.ylabel('P&L')
-plt.legend()
-plt.title('Long Call Option Payoff')
-
-st.pyplot(fig)
-
-# Plot the payoff diagram
-fig, ax = plt.subplots()
-
-ax.spines['bottom'].set_position('zero')
-ax.plot(stock_prices, payoff_long_put, label='Long Put', color='r')  # Plot the long call payoff
-max_y = max(abs(payoff_long_put.min()), abs(payoff_long_put.max()))
-ax.set_ylim(-max_y, max_y) # set y-axis limits as equal in both directions
-
-plt.xlabel('Stock Price')
-plt.ylabel('P&L')
-plt.legend()
-plt.title('Long Put Option Payoff')
-
-st.pyplot(fig)
+with payoff_long_put_col:
+    st.header("Long Put P&L")
+    fig_put = plot_payoff(stock_prices, payoff_long_put, 'Put', 'r')
+    st.pyplot(fig_put)
