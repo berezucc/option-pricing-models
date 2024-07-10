@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import streamlit as st
 
 def long_call_payoff(stock_prices, strike_price, premium):
     # If stock price > strike price, the payoff is stock price - strike price - premium
@@ -26,10 +25,16 @@ def plot_payoff(stock_prices, payoff, position, option_type, color):
     fig, ax = plt.subplots()
     ax.spines['bottom'].set_position('zero')
     ax.plot(stock_prices, payoff, label=f'{position} {option_type}', color=color)
-    max_y = max(abs(payoff.min()), abs(payoff.max()))
-    ax.set_ylim(-max_y, max_y)  # Set y-axis limits as equal in both directions
+    
+    multiplier = 2.0 if option_type == "Put" else 1.0
+    # set y negative and positive limits
+    max_y = max(abs(payoff.min()), abs(payoff.max())) * multiplier
+    ax.set_ylim(-max_y, max_y)
+    
     plt.xlabel('Stock Price')
     plt.ylabel('P&L')
     plt.legend()
     plt.title(f'{position} {option_type} Option Payoff Diagram')
+    plt.grid(True)
+    
     return fig
