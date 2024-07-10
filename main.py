@@ -5,7 +5,7 @@ import numpy as np
 
 from models.american.Binomial import Binomial
 from models.european.BlackScholes import BlackScholes
-from matplot.plotting import long_call_payoff, long_put_payoff, short_call_payoff, short_put_payoff, plot_payoff
+from matplot.payoff_plotting import long_call_payoff, long_put_payoff, short_call_payoff, short_put_payoff, plot_payoff
 
 # ---------------------------------
 # Tab config
