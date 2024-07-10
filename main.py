@@ -1,3 +1,4 @@
+import re
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -38,6 +39,24 @@ with st.sidebar:
 
     if "European" in model:
         N = st.number_input("Number of Time Steps", value=50.0, step=1.0)
+
+# ---------------------------------
+# Display option calculation inputs
+# ---------------------------------
+# regex to filter out model name
+model_name = re.findall(r"\((.*?)\)", model)[0]
+st.title(f"{model_name} Pricing Model")
+
+# Table of Inputs
+input_data = {
+    "Current Asset Price": [S],
+    "Strike Price": [K],
+    "Time to Maturity (Years)": [T],
+    "Volatility (σ)": [sigma],
+    "Risk-Free Interest Rate": [r],
+}
+input_df = pd.DataFrame(input_data)
+st.table(input_df)
 
 
 # ---------------------------------
