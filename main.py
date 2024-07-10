@@ -26,6 +26,7 @@ with st.sidebar:
     linkedin_url = "https://www.linkedin.com/in/nikita-berezyuk/"
     st.markdown(f'<a href="{linkedin_url}" target="_blank" style="color: inherit;"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="25" height="25">`Nikita Berezyuk`</a>', unsafe_allow_html=True)
     
+    # Option pricing model inputs
     model = st.radio(
         "Choose an options pricing model",
         ("American (Black-Scholes)", "European (Binomial)")
@@ -39,6 +40,9 @@ with st.sidebar:
 
     if "European" in model:
         N = st.number_input("Number of Time Steps", value=50.0, step=1.0)
+
+    st.divider()
+
 
 # ---------------------------------
 # Display option calculation inputs
