@@ -64,21 +64,21 @@ class Binomial:
         
         return option_values[0]
 
-# Example usage
-S = 100  # Current stock price
-K = 100  # Strike price
-T = 1    # Time to maturity (in years)
-r = 0.05  # Risk-free interest rate
-sigma = 0.2  # Volatility
-N = 50  # Number of time steps
+# # Example usage
+# S = 100  # Current stock price
+# K = 100  # Strike price
+# T = 1    # Time to maturity (in years)
+# r = 0.05  # Risk-free interest rate
+# sigma = 0.2  # Volatility
+# N = 50  # Number of time steps
 
-# Instantiate the BinomialOption class
-binomial_option = Binomial(S, K, T, r, sigma, N)
+# # Instantiate the BinomialOption class
+# binomial_option = Binomial(S, K, T, r, sigma, N)
 
-# Calculate and print the price of the American call option
-call_option_price = binomial_option.binomial_american_option(option_type='call')
-print("Binomial American Call Option Price:", call_option_price)
+# # Calculate and print the price of the American call option
+# call_option_price = binomial_option.binomial_american_option(option_type='call')
+# print("Binomial American Call Option Price:", call_option_price)
 
-# Calculate and print the price of the American put option
-put_option_price = binomial_option.binomial_american_option(option_type='put')
-print("Binomial American Put Option Price:", put_option_price)
+# # Calculate and print the price of the American put option
+# put_option_price = binomial_option.binomial_american_option(option_type='put')
+# print("Binomial American Put Option Price:", put_option_price)

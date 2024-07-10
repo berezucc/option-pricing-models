@@ -64,17 +64,3 @@ class BlackScholes:
         put_price = (self.strike_price * np.exp(-self.riskfree_interest_rate * self.time_to_maturity) * norm.cdf(-d2) - 
                      self.curr_price * norm.cdf(-d1))
         return put_price
-
-# Example usage
-S = 100  # Current stock price
-K = 100  # Strike price
-T = 1    # Time to maturity (in years)
-r = 0.05  # Risk-free interest rate
-sigma = 0.2  # Volatility
-
-# Instantiate the BlackScholes class
-bs = BlackScholes(S, K, T, r, sigma)
-
-# Calculate and print the prices of the call and put options
-print("Black-Scholes European Call Option Price:", bs.call_price())
-print("Black-Scholes European Put Option Price:", bs.put_price())
