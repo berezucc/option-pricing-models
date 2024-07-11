@@ -1,46 +1,24 @@
-import mysql.connector
+import psycopg2
 import streamlit as st
+import pandas as pd
+from st_supabase_connection import SupabaseConnection
 
-# Function to insert data into MySQL table
+# Initialize the Supabase client
 @st.cache_data(ttl=600)
+def init_supabase_client() -> Client:
+    url = st.secrets["connections"]["supabase"]["SUPABASE_URL"]
+    key = st.secrets["connections"]["supabase"]["SUPABASE_KEY"]
+    return create_client(url, key)
+
+supabase = init_supabase_client()
+
+# Function to insert data into Supabase table
 def insert_input_into_db(table_name, _params):
-    connection = mysql.connector.connect(
-        host=st.secrets["connections"]["mysql"]["host"],
-        user=st.secrets["connections"]["mysql"]["username"],
-        password=st.secrets["connections"]["mysql"]["password"],
-        database=st.secrets["connections"]["mysql"]["database"],
-        port=st.secrets["connections"]["mysql"]["port"]
-    )
-    cursor = connection.cursor()
-
-    columns = ', '.join(_params.keys())
-    placeholders = ', '.join(['%s'] * len(_params))
-    query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
-
-    cursor.execute(query, tuple(_params.values()))
-    connection.commit()
-
-    cursor.close()
-    connection.close()
+    data = supabase.table(table_name).insert(_params).execute()
+    return data
 
 # Function to query specific table
-@st.cache_data(ttl=600)
 def query_table(table_name):
-    connection = mysql.connector.connect(
-        host=st.secrets["connections"]["mysql"]["host"],
-        user=st.secrets["connections"]["mysql"]["username"],
-        password=st.secrets["connections"]["mysql"]["password"],
-        database=st.secrets["connections"]["mysql"]["database"],
-        port=st.secrets["connections"]["mysql"]["port"]
-    )
-    cursor = connection.cursor(dictionary=True)
-
-    query = f"SELECT * FROM {table_name}"
-    cursor.execute(query)
-    
-    result = cursor.fetchall()
-    
-    cursor.close()
-    connection.close()
-    
-    return result
+    data = supabase.table(table_name).select("*").execute()
+    df = pd.DataFrame(data.data)
+    return df

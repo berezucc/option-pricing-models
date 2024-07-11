@@ -85,7 +85,7 @@ if calculate:
             "TimeToExpiry": T,
             "Simulations": N
         }
-    insert_input_into_db(table_name, params)
+    # insert_input_into_db(table_name, params)
 
     # ---------------------------------
     # Display option calculation inputs
