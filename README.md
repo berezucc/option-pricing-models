@@ -3,6 +3,10 @@ Inspired by the knowledge I gained from Akuna Capital's Options 101 course, I em
 
 This project is a comprehensive toolkit for pricing financial options using various models. It leverages Python libraries such as Streamlit, Pandas, Numpy, and Matplotlib to provide an interactive web application for quantitative financial analysis. Users can select between different pricing models, input parameters, and visualize the results through intuitive graphs and heatmaps.
 
+## Demo
+
+https://option-pricings.streamlit.app/
+
 ## Features
 
 - **Interactive Web Interface**: Built with Streamlit, offering a user-friendly interface for model selection and parameter input.
