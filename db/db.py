@@ -1,3 +1,4 @@
+"""
 import mysql.connector
 import streamlit as st
 
@@ -41,3 +42,4 @@ def query_table(table_name):
 
     cursor.close()
     connection.close()
+"""
