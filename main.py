@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-from db.db import insert_input_into_db
+# from db.db import insert_input_into_db
 
 from models.american.Binomial import BinomialAmericanOption
 from models.european.BlackScholes import BlackScholes
